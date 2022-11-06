@@ -21,8 +21,19 @@ class DbHelper {
   static Stream<QuerySnapshot<Map<String, dynamic>>> getAllCategories() =>
       _db.collection(collectionCategory).snapshots();
 
-  static Future<void> addNewProduct( ProductModel productModel, PurchaseModel purchaseModel) {
-    final wb = _db.batch();//write batch
+  static Stream<QuerySnapshot<Map<String, dynamic>>> getAllProducts() =>
+      _db.collection(collectionProducts).snapshots();
+
+  static Stream<QuerySnapshot<Map<String, dynamic>>> getAllProductsByCategory(
+          String categoryName) =>
+      _db.collection(collectionProducts)
+          .where('$productFieldCategory.$categoryFieldCategoryName',
+              isEqualTo: categoryName)
+          .snapshots();
+
+  static Future<void> addNewProduct(
+      ProductModel productModel, PurchaseModel purchaseModel) {
+    final wb = _db.batch(); //write batch
     final productDoc = _db.collection(collectionProducts).doc();
     final purchaseDoc = _db.collection(collectionPurchase).doc();
 
@@ -32,10 +43,12 @@ class DbHelper {
     wb.set(productDoc, productModel.toMap());
     wb.set(purchaseDoc, purchaseModel.toMap());
 
-    final updatedCount = purchaseModel.purchaseQuantity + productModel.category.productCount;
-    final catDoc = _db.collection(collectionCategory).doc(productModel.category.categoryId);
-    wb.update(catDoc, {categoryFieldProductCount : updatedCount});
+    final updatedCount =
+        purchaseModel.purchaseQuantity + productModel.category.productCount;
+    final catDoc = _db
+        .collection(collectionCategory)
+        .doc(productModel.category.categoryId);
+    wb.update(catDoc, {categoryFieldProductCount: updatedCount});
     return wb.commit();
   }
-
 }

@@ -76,7 +76,7 @@ class ProductModel {
         salePrice: map[productFieldSalePrice],
         stock: map[productFieldStock],
         avgRating: map[productFieldAvgRating],
-        thumbnailImageModel: map[productFieldThumbnail],
+        thumbnailImageModel: ImageModel.fromMap(map[productFieldThumbnail]),
         shortDescription: map[productFieldShortDescription],
         longDescription: map[productFieldLongDescription],
         additionalImageModels: map[productFieldImages] == null
