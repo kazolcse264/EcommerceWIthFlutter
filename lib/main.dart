@@ -48,7 +48,7 @@ class MyApp extends StatelessWidget {
         LauncherPage.routeName: (context) => const LauncherPage(),
         LoginPage.routeName: (context) => const LoginPage(),
         OrderListPage.routeName: (context) => const OrderListPage(),
-        ProductDetailsPage.routeName: (context) => const ProductDetailsPage(),
+        ProductDetailsPage.routeName: (context) => ProductDetailsPage(),
         ProductRepurchasePage.routeName: (context) =>
             const ProductRepurchasePage(),
         ReportPage.routeName: (context) => const ReportPage(),

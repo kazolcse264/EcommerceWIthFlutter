@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:ecom_admin/pages/product_details_page.dart';
 import 'package:ecom_admin/providers/product_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -37,7 +38,8 @@ class _ViewProductPageState extends State<ViewProductPage> {
                           borderSide:
                               const BorderSide(color: Colors.blue, width: 1))),
                   hint: const Text('Select Category'),
-                  items: provider.getCategoriesForFiltering()
+                  items: provider
+                      .getCategoriesForFiltering()
                       .map((catModel) => DropdownMenuItem(
                             value: catModel,
                             child: Text(catModel.categoryName),
@@ -54,24 +56,31 @@ class _ViewProductPageState extends State<ViewProductPage> {
                     setState(() {
                       categoryModel = value;
                     });
-                    if(categoryModel!.categoryName == 'All'){
+                    if (categoryModel!.categoryName == 'All') {
                       provider.getAllProducts();
-                    }else{
-                      provider.getAllProductsByCategory(categoryModel!.categoryName);
+                    } else {
+                      provider.getAllProductsByCategory(
+                          categoryModel!.categoryName);
                     }
                   }),
             ),
             Expanded(
                 child: ListView.builder(
-                  itemCount: provider.productList.length,
+              itemCount: provider.productList.length,
               itemBuilder: (context, index) {
                 final product = provider.productList[index];
                 return ListTile(
+                  onTap: () => Navigator.pushNamed(
+                      context, ProductDetailsPage.routeName,
+                      arguments: product),
                   leading: CachedNetworkImage(
                     width: 50,
                     imageUrl: product.thumbnailImageModel.imageDownloadUrl,
-                    placeholder: (context, url) => const Center(child: CircularProgressIndicator(),),
-                    errorWidget: (context, url, error) => const Icon(Icons.error),
+                    placeholder: (context, url) => const Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                    errorWidget: (context, url, error) =>
+                        const Icon(Icons.error),
                   ),
                   title: Text(product.productName),
                   subtitle: Text(product.category.categoryName),

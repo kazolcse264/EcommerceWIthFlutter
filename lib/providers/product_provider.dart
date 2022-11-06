@@ -36,6 +36,11 @@ class ProductProvider extends ChangeNotifier {
       notifyListeners();
     });
   }
+
+  Future<List<PurchaseModel>> getPurchasesByProductId(String productId) async{
+    final snapshot = await DbHelper.getAllPurchaseByProductId(productId);
+    return List.generate(snapshot.docs.length, (index) => PurchaseModel.fromMap(snapshot.docs[index].data()));
+  }
   getAllProductsByCategory(String categoryName) {
     DbHelper.getAllProductsByCategory(categoryName).listen((snapshot) {
       productList = List.generate(snapshot.docs.length,
