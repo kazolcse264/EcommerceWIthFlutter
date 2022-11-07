@@ -28,7 +28,7 @@ class ProductModel {
   num avgRating;
   num productDiscount;
   ImageModel thumbnailImageModel;
-  List<ImageModel>? additionalImageModels;
+  List<String> additionalImageModels;
   bool available;
   bool featured;
 
@@ -43,7 +43,7 @@ class ProductModel {
     this.avgRating = 0.0,
     this.productDiscount = 0,
     required this.thumbnailImageModel,
-    this.additionalImageModels,
+    required this.additionalImageModels,
     this.available = true,
     this.featured = false,
   });
@@ -55,10 +55,7 @@ class ProductModel {
       productFieldCategory: category.toMap(),
       productFieldAvailable: available,
       productFieldDiscount: productDiscount,
-      productFieldImages: additionalImageModels == null
-          ? null
-          : List.generate(additionalImageModels!.length,
-              (index) => additionalImageModels![index].toMap()),
+      productFieldImages: additionalImageModels,
       productFieldLongDescription: longDescription,
       productFieldShortDescription: shortDescription,
       productFieldFeatured: featured,
@@ -79,12 +76,7 @@ class ProductModel {
         thumbnailImageModel: ImageModel.fromMap(map[productFieldThumbnail]),
         shortDescription: map[productFieldShortDescription],
         longDescription: map[productFieldLongDescription],
-        additionalImageModels: map[productFieldImages] == null
-            ? null
-            : List.generate(
-                (map[productFieldImages] as List).length,
-                (index) => ImageModel.fromMap(
-                    (map[productFieldImages] as List)[index])),
+        additionalImageModels: (map[productFieldImages] as List).map((e) => e as String).toList(),
         available: map[productFieldAvailable],
         productDiscount: map[productFieldDiscount],
         featured: map[productFieldFeatured],

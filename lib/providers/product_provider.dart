@@ -13,6 +13,7 @@ import '../models/image_model.dart';
 class ProductProvider extends ChangeNotifier {
   List<CategoryModel> categoryList = [];
   List<ProductModel> productList = [];
+  List<PurchaseModel> purchaseList = [];
 
   Future<void> addCategory(String category) {
     final categoryModel = CategoryModel(categoryName: category);
@@ -29,32 +30,43 @@ class ProductProvider extends ChangeNotifier {
       notifyListeners();
     });
   }
+
   getAllProducts() {
     DbHelper.getAllProducts().listen((snapshot) {
       productList = List.generate(snapshot.docs.length,
-              (index) => ProductModel.fromMap(snapshot.docs[index].data()));
+          (index) => ProductModel.fromMap(snapshot.docs[index].data()));
       notifyListeners();
     });
   }
 
-  Future<List<PurchaseModel>> getPurchasesByProductId(String productId) async{
-    final snapshot = await DbHelper.getAllPurchaseByProductId(productId);
-    return List.generate(snapshot.docs.length, (index) => PurchaseModel.fromMap(snapshot.docs[index].data()));
+
+  getAllPurchases() {
+    DbHelper.getAllPurchases().listen((snapshot) {
+      purchaseList = List.generate(snapshot.docs.length,
+              (index) => PurchaseModel.fromMap(snapshot.docs[index].data()));
+      notifyListeners();
+    });
   }
+
+  List<PurchaseModel> getPurchasesByProductId(String productId){
+    return purchaseList.where((element) => element.productId == productId).toList();
+  }
+
   getAllProductsByCategory(String categoryName) {
     DbHelper.getAllProductsByCategory(categoryName).listen((snapshot) {
       productList = List.generate(snapshot.docs.length,
-              (index) => ProductModel.fromMap(snapshot.docs[index].data()));
+          (index) => ProductModel.fromMap(snapshot.docs[index].data()));
       notifyListeners();
     });
   }
 
-  List<CategoryModel> getCategoriesForFiltering(){
-    return<CategoryModel>[
-      CategoryModel(categoryName: 'All'), ...categoryList,//... means cascading or join
+  List<CategoryModel> getCategoriesForFiltering() {
+    return <CategoryModel>[
+      CategoryModel(categoryName: 'All'),
+      ...categoryList,
+      //... means cascading or join
     ];
-
-}
+  }
 
   Future<ImageModel> uploadImage(String path) async {
     final imageName = 'pro_${DateTime.now().millisecondsSinceEpoch}';
@@ -69,6 +81,20 @@ class ProductProvider extends ChangeNotifier {
 
   Future<void> addNewProduct(
       ProductModel productModel, PurchaseModel purchaseModel) {
-    return DbHelper.addNewProduct(productModel,purchaseModel);
+    return DbHelper.addNewProduct(productModel, purchaseModel);
+  }
+
+  Future<void> repurchase(
+      PurchaseModel purchaseModel, ProductModel productModel) {
+    return DbHelper.repurchase(purchaseModel, productModel);
+  }
+
+   double priceAfterDisCount(num salePrice, num productDiscount) {
+    final discountPrice = (salePrice*productDiscount)/100;
+    return salePrice - discountPrice;
+  }
+
+  Future<void> updateProductField(String productId, String field, dynamic value) {
+    return DbHelper.updateProductField(productId,{field:value});
   }
 }
