@@ -1,4 +1,5 @@
 import 'package:ecom_admin/auth/auth_service.dart';
+import 'package:ecom_admin/providers/order_provider.dart';
 import 'package:ecom_admin/providers/product_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -17,6 +18,7 @@ class DashBoardPage extends StatelessWidget {
     Provider.of<ProductProvider>(context,listen: false).getAllCategories();
     Provider.of<ProductProvider>(context,listen: false).getAllProducts();
     Provider.of<ProductProvider>(context,listen: false).getAllPurchases();
+    Provider.of<OrderProvider>(context,listen: false).getOrderConstants();
     return Scaffold(
       appBar: AppBar(
         title: const Text('Dashboard'),

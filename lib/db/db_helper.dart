@@ -3,6 +3,8 @@ import 'package:ecom_admin/models/category_model.dart';
 import 'package:ecom_admin/models/product_models.dart';
 import 'package:ecom_admin/models/purchase_model.dart';
 
+import '../models/order_constant_model.dart';
+
 class DbHelper {
   static const String collectAdmin = 'Admins';
   static final _db = FirebaseFirestore.instance;
@@ -80,6 +82,13 @@ class DbHelper {
   static Future<void> updateProductField(String productId, Map<String, dynamic> map) {
     return _db.collection(collectionProducts).doc(productId).update(map);
   }
+  static Stream<DocumentSnapshot<Map<String, dynamic>>> getOrderConstants() =>
+      _db.collection(collectionUtils).doc(documentOrderConstants).snapshots();
 
+  static Future<void> updateOrderConstants(OrderConstantModel model) {
+    return _db.collection(collectionUtils)
+        .doc(documentOrderConstants)
+        .update(model.toMap());
+  }
 
 }
