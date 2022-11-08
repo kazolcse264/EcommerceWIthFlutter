@@ -79,6 +79,10 @@ class ProductProvider extends ChangeNotifier {
     return ImageModel(title: imageName, imageDownloadUrl: downloadUrl);
   }
 
+  Future<void> deleteImage(String url) {
+    return FirebaseStorage.instance.refFromURL(url).delete();
+  }
+
   Future<void> addNewProduct(
       ProductModel productModel, PurchaseModel purchaseModel) {
     return DbHelper.addNewProduct(productModel, purchaseModel);

@@ -39,8 +39,8 @@ class DashBoardPage extends StatelessWidget {
         ],
       ),
       body: GridView.builder(
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
+        gridDelegate:  SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: MediaQuery.of(context).size.width > 600 ? 3 : 2,
         ),
         itemCount: dashboardModelList.length,
         itemBuilder: (context, index) => DashboardItemView(

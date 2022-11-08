@@ -23,19 +23,17 @@ class PhotoFrameView extends StatelessWidget {
       decoration: BoxDecoration(
           border: Border.all(
               color: Colors.grey, width: 1.5, style: BorderStyle.solid)),
-      child: url.isEmpty
-          ? child
-          : InkWell(
-              onTap: onImagePressed,
-              child: CachedNetworkImage(
-                fit: BoxFit.cover,
-                imageUrl: url,
-                placeholder: (context, url) => const Center(
-                  child: CircularProgressIndicator(),
-                ),
-                errorWidget: (context, url, error) => const Icon(Icons.error),
-              ),
-            ),
+      child: url.isEmpty ? child :
+      InkWell(
+        onTap: onImagePressed,
+        child: CachedNetworkImage(
+          fit: BoxFit.cover,
+          imageUrl: url,
+          placeholder: (context, url) =>
+          const Center(child: CircularProgressIndicator()),
+          errorWidget: (context, url, error) => const Icon(Icons.error),
+        ),
+      ),
     );
   }
 }
