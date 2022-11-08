@@ -57,17 +57,32 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   PhotoFrameView(
+                    onImagePressed: () {},
+                    url: productModel.additionalImageModels[0],
                     child: IconButton(
-                        onPressed: _addImage, icon: const Icon(Icons.add)),
+                        onPressed: () {
+                          _addImage(0);
+                        },
+                        icon: const Icon(Icons.add)),
                   ),
                   PhotoFrameView(
+                    onImagePressed: () {},
+                    url: productModel.additionalImageModels[1],
                     child: IconButton(
-                        onPressed: _addImage, icon: const Icon(Icons.add)),
+                        onPressed: () {
+                          _addImage(1);
+                        },
+                        icon: const Icon(Icons.add)),
                   ),
                   PhotoFrameView(
+                    onImagePressed: () {},
+                    url: productModel.additionalImageModels[2],
                     child: IconButton(
-                        onPressed: _addImage, icon: const Icon(Icons.add)),
-                  )
+                        onPressed: () {
+                          _addImage(2);
+                        },
+                        icon: const Icon(Icons.add)),
+                  ),
                 ],
               ),
             ),
@@ -152,18 +167,22 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
         });
   }
 
-  void _addImage() async {
+  void _addImage(int index) async {
     final selectedFile =
         await ImagePicker().pickImage(source: ImageSource.gallery);
     if (selectedFile != null) {
       EasyLoading.show(status: "Please Wait");
       final imageModel = await productProvider.uploadImage(selectedFile.path);
-      productModel.additionalImageModels.add(imageModel.imageDownloadUrl);
+      final previousImageList = productModel.additionalImageModels;
+      previousImageList[index] = imageModel.imageDownloadUrl;
       productProvider
-          .updateProductField(productModel.productId!, productFieldImages,
-              productModel.additionalImageModels)
+          .updateProductField(
+              productModel.productId!, productFieldImages, previousImageList)
           .then((value) {
-            showMsg(context, 'Uploaded');
+            setState(() {
+              productModel.additionalImageModels[index] = imageModel.imageDownloadUrl;
+            });
+        showMsg(context, 'Uploaded');
         EasyLoading.dismiss();
       }).catchError((error) {
         showMsg(context, 'Failed to uploaded');
