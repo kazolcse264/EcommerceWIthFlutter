@@ -59,7 +59,6 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                 children: [
                   PhotoFrameView(
                     onImagePressed: () {
-                      print('Clicked..............');
                       _showImageInDialog(0);
                     },
                     url: productModel.additionalImageModels[0],

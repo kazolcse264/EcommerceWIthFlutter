@@ -13,7 +13,7 @@ const String userFieldUserCreationTime = 'userCreationTime';
 const String userFieldAddressModel = 'addressModel';
 
 class UserModel {
-  String? userId;
+  String userId;
   String? displayName;
   String? userImageUrl;
   String? gender;
@@ -24,7 +24,7 @@ class UserModel {
   AddressModel? addressModel;
 
   UserModel({
-    this.userId,
+    required this.userId,
     this.displayName,
     this.userImageUrl,
     this.gender,

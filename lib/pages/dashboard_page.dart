@@ -1,6 +1,7 @@
 import 'package:ecom_admin/auth/auth_service.dart';
 import 'package:ecom_admin/providers/order_provider.dart';
 import 'package:ecom_admin/providers/product_provider.dart';
+import 'package:ecom_admin/providers/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -19,18 +20,31 @@ class DashBoardPage extends StatelessWidget {
     Provider.of<ProductProvider>(context,listen: false).getAllProducts();
     Provider.of<ProductProvider>(context,listen: false).getAllPurchases();
     Provider.of<OrderProvider>(context,listen: false).getOrderConstants();
+    Provider.of<OrderProvider>(context,listen: false).getOrders();
+    Provider.of<UserProvider>(context,listen: false).getAllUsers();
     return Scaffold(
       appBar: AppBar(
         title: const Text('Dashboard'),
         actions: [
           IconButton(
             onPressed: () {
-              AuthService.logOut().then(
-                (value) => Navigator.pushReplacementNamed(
-                  context,
-                  LauncherPage.routeName,
-                ),
-              );
+           showDialog(context: context, builder: (context)=> AlertDialog(
+             title: const Text('Logout'),
+             content: const Text('Do you want to logout'),
+             actions: [
+               TextButton(onPressed: (){
+                 Navigator.pop(context);
+               }, child: const Text('Cancel'),),
+               TextButton(onPressed: (){
+                 AuthService.logOut().then(
+                       (value) => Navigator.pushReplacementNamed(
+                     context,
+                     LauncherPage.routeName,
+                   ),
+                 );
+               }, child: const Text('Yes'),),
+             ],
+           ));
             },
             icon: const Icon(
               Icons.logout,

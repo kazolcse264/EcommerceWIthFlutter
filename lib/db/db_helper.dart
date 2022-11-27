@@ -4,6 +4,8 @@ import 'package:ecom_admin/models/product_models.dart';
 import 'package:ecom_admin/models/purchase_model.dart';
 
 import '../models/order_constant_model.dart';
+import '../models/order_model.dart';
+import '../models/user_model.dart';
 
 class DbHelper {
   static const String collectAdmin = 'Admins';
@@ -13,7 +15,10 @@ class DbHelper {
     final snapshot = await _db.collection(collectAdmin).doc(uid).get();
     return snapshot.exists;
   }
-
+  static Future<bool> doesUserExist(String uid) async {
+    final snapshot = await _db.collection(collectionUsers).doc(uid).get();
+    return snapshot.exists;
+  }
   static Future<void> addCategory(CategoryModel categoryModel) {
     final catDoc = _db.collection(collectionCategory).doc();
     categoryModel.categoryId = catDoc.id;
@@ -25,6 +30,12 @@ class DbHelper {
 
   static Stream<QuerySnapshot<Map<String, dynamic>>> getAllProducts() =>
       _db.collection(collectionProducts).snapshots();
+
+  static Stream<QuerySnapshot<Map<String, dynamic>>> getAllUsers() =>
+      _db.collection(collectionUsers).snapshots();
+
+  static Stream<QuerySnapshot<Map<String, dynamic>>> getAllOrders() =>
+      _db.collection(collectionOrder).snapshots();
 
   static Stream<QuerySnapshot<Map<String, dynamic>>> getAllPurchases() =>
       _db.collection(collectionPurchase).snapshots();
@@ -89,6 +100,13 @@ class DbHelper {
     return _db.collection(collectionUtils)
         .doc(documentOrderConstants)
         .update(model.toMap());
+  }
+
+  static Future<void> updateOrderStatus(String orderId, String status) {
+    return _db
+        .collection(collectionOrder)
+        .doc(orderId)
+        .update({orderFieldOrderStatus: status});
   }
 
 }

@@ -1,11 +1,12 @@
 import 'package:ecom_admin/pages/add_product_page.dart';
 import 'package:ecom_admin/pages/category_page.dart';
-import 'package:ecom_admin/pages/order_list_page.dart';
 import 'package:ecom_admin/pages/report_page.dart';
 import 'package:ecom_admin/pages/settings_page.dart';
 import 'package:ecom_admin/pages/user_list_page.dart';
 import 'package:ecom_admin/pages/veiw_product_page.dart';
 import 'package:flutter/material.dart';
+
+import '../pages/order_page.dart';
 
 class DashboardModel {
   final String title;
@@ -35,7 +36,7 @@ const List<DashboardModel> dashboardModelList = [
   DashboardModel(
       title: 'Orders',
       iconData: Icons.monetization_on,
-      routeName: OrderListPage.routeName),
+      routeName: OrderPage.routeName),
   DashboardModel(
       title: 'Users',
       iconData: Icons.person,
