@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 
 import '../db/db_helper.dart';
 import '../models/category_model.dart';
+import '../models/comment_model.dart';
 import '../models/image_model.dart';
 
 class ProductProvider extends ChangeNotifier {
@@ -60,6 +61,11 @@ class ProductProvider extends ChangeNotifier {
     });
   }
 
+  ProductModel getProductByIdFromCache(String id) {
+    return productList.firstWhere((element) => element.productId == id);
+  }
+
+
   List<CategoryModel> getCategoriesForFiltering() {
     return <CategoryModel>[
       CategoryModel(categoryName: 'All'),
@@ -100,5 +106,16 @@ class ProductProvider extends ChangeNotifier {
 
   Future<void> updateProductField(String productId, String field, dynamic value) {
     return DbHelper.updateProductField(productId,{field:value});
+  }
+
+  Future<List<CommentModel>> getCommentsByProduct(String s) async {
+    final snapshot = await DbHelper.getCommentsByProduct(s);
+    final commentList = List.generate(snapshot.docs.length,
+            (index) => CommentModel.fromMap(snapshot.docs[index].data()));
+    return commentList;
+  }
+
+  Future<void> approveComment(String productId, CommentModel commentModel) {
+    return DbHelper.approveComment(productId, commentModel);
   }
 }

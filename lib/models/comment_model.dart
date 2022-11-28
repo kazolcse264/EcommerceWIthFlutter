@@ -1,40 +1,48 @@
-const String collectionComments = 'comments';
-const String commentFieldCommentId = 'ratingId';
-const String commentFieldUserId = 'userId';
+import 'user_model.dart';
+
+const String collectionComment = 'Comment';
+
+const String commentFieldId = 'commentId';
+const String commentFieldUserModel = 'userModel';
 const String commentFieldProductId = 'productId';
 const String commentFieldComment = 'comment';
+const String commentFieldDate = 'date';
 const String commentFieldApproved = 'approved';
 
 class CommentModel {
-  String commentId;
-  String userId;
+  String? commentId;
+  UserModel userModel;
   String productId;
   String comment;
   bool approved;
+  String date;
 
   CommentModel({
-    required this.commentId,
-    required this.userId,
+    this.commentId,
+    required this.userModel,
     required this.productId,
     required this.comment,
+    required this.date,
     this.approved = false,
   });
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
-      commentFieldCommentId: commentId,
-      commentFieldUserId: userId,
+      commentFieldId: commentId,
+      commentFieldUserModel: userModel.toMap(),
       commentFieldProductId: productId,
-      commentFieldComment: comment,
+      commentFieldDate: date,
       commentFieldApproved: approved,
+      commentFieldComment: comment,
     };
   }
 
   factory CommentModel.fromMap(Map<String, dynamic> map) => CommentModel(
-        commentId: map[commentFieldCommentId],
-        userId: map[commentFieldUserId],
-        productId: map[commentFieldProductId],
-        comment: map[commentFieldComment],
-        approved: map[commentFieldApproved],
-      );
+    commentId: map[commentFieldId],
+    userModel: UserModel.fromMap(map[commentFieldUserModel]),
+    productId: map[commentFieldProductId],
+    comment: map[commentFieldComment],
+    approved: map[commentFieldApproved],
+    date: map[commentFieldDate],
+  );
 }

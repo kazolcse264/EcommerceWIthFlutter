@@ -6,6 +6,7 @@ import 'package:ecom_admin/pages/user_list_page.dart';
 import 'package:ecom_admin/pages/veiw_product_page.dart';
 import 'package:flutter/material.dart';
 
+import '../pages/notification_page.dart';
 import '../pages/order_page.dart';
 
 class DashboardModel {
@@ -49,4 +50,9 @@ const List<DashboardModel> dashboardModelList = [
       title: 'Report',
       iconData: Icons.pie_chart,
       routeName: ReportPage.routeName),
+  DashboardModel(
+    title: 'Notifications',
+    iconData: Icons.notification_important,
+    routeName: NotificationPage.routeName,
+  ),
 ];

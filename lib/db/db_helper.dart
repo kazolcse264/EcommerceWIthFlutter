@@ -3,6 +3,8 @@ import 'package:ecom_admin/models/category_model.dart';
 import 'package:ecom_admin/models/product_models.dart';
 import 'package:ecom_admin/models/purchase_model.dart';
 
+import '../models/comment_model.dart';
+import '../models/notification_model.dart';
 import '../models/order_constant_model.dart';
 import '../models/order_model.dart';
 import '../models/user_model.dart';
@@ -107,6 +109,33 @@ class DbHelper {
         .collection(collectionOrder)
         .doc(orderId)
         .update({orderFieldOrderStatus: status});
+  }
+
+
+  static Future<void> updateNotificationStatus(String id) {
+    return _db
+        .collection(collectionNotification)
+        .doc(id)
+        .update({notificationFieldStatus: true});
+  }
+
+  static Stream<QuerySnapshot<Map<String, dynamic>>> getAllNotifications() =>
+      _db.collection(collectionNotification).snapshots();
+
+  static Future<QuerySnapshot<Map<String, dynamic>>> getCommentsByProduct(
+      String proId) =>
+      _db
+          .collection(collectionProducts)
+          .doc(proId)
+          .collection(collectionComment)
+          .get();
+
+  static Future<void> approveComment(String productId, CommentModel commentModel) {
+    return _db.collection(collectionProducts)
+        .doc(productId)
+        .collection(collectionComment)
+        .doc(commentModel.commentId)
+        .update({commentFieldApproved : true});
   }
 
 }

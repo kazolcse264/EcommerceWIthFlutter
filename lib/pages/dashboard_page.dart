@@ -1,10 +1,12 @@
 import 'package:ecom_admin/auth/auth_service.dart';
+import 'package:ecom_admin/providers/notification_provider.dart';
 import 'package:ecom_admin/providers/order_provider.dart';
 import 'package:ecom_admin/providers/product_provider.dart';
 import 'package:ecom_admin/providers/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../custom_widgets/badge_view.dart';
 import '../custom_widgets/dashboard_item_view.dart';
 import '../models/dashboard_model.dart';
 import 'launcher_page.dart';
@@ -22,6 +24,7 @@ class DashBoardPage extends StatelessWidget {
     Provider.of<OrderProvider>(context,listen: false).getOrderConstants();
     Provider.of<OrderProvider>(context,listen: false).getOrders();
     Provider.of<UserProvider>(context,listen: false).getAllUsers();
+    Provider.of<NotificationProvider>(context,listen: false).getAllNotifications();
     return Scaffold(
       appBar: AppBar(
         title: const Text('Dashboard'),
@@ -53,13 +56,21 @@ class DashBoardPage extends StatelessWidget {
         ],
       ),
       body: GridView.builder(
-        gridDelegate:  SliverGridDelegateWithFixedCrossAxisCount(
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: MediaQuery.of(context).size.width > 600 ? 3 : 2,
         ),
         itemCount: dashboardModelList.length,
-        itemBuilder: (context, index) => DashboardItemView(
-          model: dashboardModelList[index],
-        ),
+        itemBuilder: (context, index) {
+          final model = dashboardModelList[index];
+          if(model.title == 'Notifications') {
+            final count =
+                Provider.of<NotificationProvider>(context).totalUnreadMessage;
+            return DashboardItemView(
+              model: model,
+              badge: BadgeView(count: count,),);
+          }
+          return DashboardItemView(model: model);
+        },
       ),
     );
   }

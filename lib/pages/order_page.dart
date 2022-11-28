@@ -14,6 +14,7 @@ class OrderPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final id = ModalRoute.of(context)!.settings.arguments as String? ;
     return Scaffold(
       appBar: AppBar(
         title: const Text('Orders'),
@@ -24,6 +25,7 @@ class OrderPage extends StatelessWidget {
           itemBuilder: (context, index) {
             final order = provider.orderList[index];
             return ListTile(
+              tileColor: order.orderId == id ? Colors.grey : null,
               onTap: () => Navigator.pushNamed(
                   context, OrderDetailsPage.routeName,
                   arguments: order.orderId),
